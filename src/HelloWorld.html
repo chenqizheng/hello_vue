@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Vue</title>
+    <script src="http://cn.vuejs.org/js/vue.js"></script>
+
+</head>
+<body>
+
+<h2>HelloWorld</h2>
+<div id="helloWorld">
+    {{ message }}
+</div>
+
+<br>
+<h2>双向绑定</h2>
+<div id="double_bind">
+    <span> {{ message}} </span>
+    <input v-model="message"/>
+</div>
+
+<br>
+<h2>渲染列表</h2>
+<ul id="for_list">
+    <li v-for="item in items">
+        <p>{{item.name}}</p>
+    </li>
+</ul>
+
+<br>
+<h2>处理点击事件</h2>
+<div id="click_event">
+    <p>{{message}}</p>
+    <button v-on:click="reverseMessage">ReverseMessage</button>
+</div>
+
+<br>
+
+<h2>Todos</h2>
+
+<div id="todos">
+    <input v-on:keyup.enter="addTodo" v-model="newTodo"/>
+    <ul>
+        <li v-for="todo in todos">
+            {{todo.name}}
+            <button @click="removeTodo($index)">X</button>
+        </li>
+    </ul>
+</div>
+
+<h2>条件渲染</h2>
+
+<div id="if_else">
+    <template v-if="ok">
+        <span>true</span>
+    </template>
+    <template v-else>
+        <span>false</span>
+    </template>
+</div>
+
+<script>
+    new Vue({
+        el: '#helloWorld',
+        data: {
+            message: 'Hello Vue.js!'
+        }
+    })
+
+    new Vue({
+        el: '#double_bind',
+        data: {
+            message: 'double bind'
+        }
+    })
+
+    new Vue({
+        el: "#for_list",
+        data: {
+            items: [
+                {name: "yonyou"},
+                {name: "beijing"},
+                {name: "china"}
+            ]
+        }
+    })
+
+    new Vue({
+        el: "#click_event",
+        data: {message: "click event"},
+        methods: {
+            reverseMessage: function () {
+                this.message = this.message.split('').reverse().join('');
+            }
+        }
+    })
+
+    new Vue({
+        el: '#todos',
+        data: {newTodo: '', todos: []},
+        methods: {
+            addTodo: function () {
+                var text = this.newTodo.trim();
+                if (text) {
+                    this.todos.push({name: text}),
+                            this.newTodo = ''
+                }
+            },
+            removeTodo: function (index) {
+                this.todos.splice(index, 1);
+            }
+        }
+    })
+
+    new Vue({
+        el: '#if_else',
+        data: {ok: false}
+    })
+
+</script>
+</body>
+</html>

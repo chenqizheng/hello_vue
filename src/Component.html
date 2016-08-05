@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component</title>
+    <script src="http://cn.vuejs.org/js/vue.js"></script>
+
+</head>
+<body>
+<h2>Component</h2>
+<div id="component_1">
+    <my-component_1></my-component_1>
+</div>
+
+<h2>Props</h2>
+<div id="component_2">
+    <my-component_2 msg="HelloWorld"></my-component_2>
+</div>
+
+<h2>组件嵌套</h2>
+<div id="component_3">
+    <Parent>
+    </Parent>
+</div>
+
+<h2>组件消息</h2>
+<div id="component_4">
+    <span>message = {{ message }}</span>
+    <input_message v-ref:input></input_message>
+    <template id="child-template">
+        <input v-model="message">
+        <button v-on:click="notify">Dispatch Event</button>
+    </template>
+</div>
+
+
+<script>
+    var MyComponent1 = Vue.extend({
+        template: 'this is a custom component',
+    })
+    Vue.component("my-component_1", MyComponent1);
+    new Vue({
+        el: '#component_1'
+    })
+
+    var MyComponent2 = Vue.extend({
+        template: 'this is a custom component,msg = {{ msg }}',
+        props: ['msg']
+    })
+    Vue.component("my-component_2", MyComponent2);
+    new Vue({
+        el: '#component_2'
+    })
+
+    var Child = Vue.extend({
+        template: '<div>Child</div>'
+    })
+    var Parent = Vue.extend({
+        template: '<Child></Child>',
+        components: {
+            'Child': Child
+        }
+    })
+    Vue.component('Parent', Parent);
+    new Vue({
+        el: '#component_3'
+    })
+
+
+    var InputMessage = Vue.extend({
+        template: '#child-template',
+        data: function () {
+            return {
+                message: ''
+            }
+        },
+        methods: {
+            notify: function () {
+                this.$dispatch("child_message", this.message)
+            }
+        }
+    })
+    Vue.component('input_message', InputMessage);
+
+    new Vue({
+        data:{
+            message:''
+        },
+        el:'#component_4',
+        events:{
+            'child_message':function (msg) {
+                console.log(this.$refs.input)
+                this.message = msg;
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
